@@ -34,6 +34,17 @@
 		public function get_pagination_number(){
 			return ceil($this->total_records / $this->limit);
 		}
+
+		public function prev_page(){
+			return ($this->current_page() > 1) ? $this->current_page() : 1;
+		}
+		public function next_page(){
+			return ($this->current_page() < $this->get_pagination_number()) ? $this->current_page()+1 : $this->get_pagination_number();
+		}
+		public function is_active_class($page){
+			return ($page == $this->current_page()) ? 'active' : '';
+		}
+		
 	}
 
 

@@ -10,6 +10,12 @@
 <html>
 <head>
 	<title>Pagination PDO Class</title>
+	<style type="text/css">
+		.active{
+			background: rgb(23, 169, 201);
+			color: white;
+		}
+	</style>
 </head>
 <body>	
 	<ul>
@@ -18,8 +24,10 @@
 		<? endforeach; ?>
 	</ul>
 	<hr>
-	<? for($=i; $i<=$pages; $i++): ?>
-		<a href="?page=<? echo $i;?>"><? echo $i;</a>
-	<? endfor; ?>
+	<a href="?page=<? echo $pagination->prev_page()?>"> << </a>
+		<? for($=i; $i<=$pages; $i++): ?>
+			<a class="<? echo $pagination->is_active_class($i) ?>" href="?page=<? echo $i;?>"><? echo $i;</a>
+		<? endfor; ?>
+	<a href="?page=<? echo $pagination->next_page()?>"> >> </a>
 </body>
 </html>

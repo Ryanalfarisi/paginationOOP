@@ -13,7 +13,3 @@ Build a pagination system with OOP system (Object Oriented Programming) and Data
 
 * Install PHP >= 5.6
 * Mysqli
-
-
-
-
