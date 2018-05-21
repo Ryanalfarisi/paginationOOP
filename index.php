@@ -24,10 +24,11 @@
 		<? endforeach; ?>
 	</ul>
 	<hr>
-	<a href="?page=<? echo $pagination->prev_page()?>"> << </a>
+	<a href="?page=<? echo $pagination->prev_page().''.$pagination->check_search();?>"> << </a>
 		<? for($=i; $i<=$pages; $i++): ?>
-			<a class="<? echo $pagination->is_active_class($i) ?>" href="?page=<? echo $i;?>"><? echo $i;</a>
+			<a class="<? echo $pagination->is_active_class($i) ?>" 
+				href="?page=<? echo $i.''.$pagination->check_search(); ?>"><? echo $i;</a>
 		<? endfor; ?>
-	<a href="?page=<? echo $pagination->next_page()?>"> >> </a>
+	<a href="?page=<? echo $pagination->next_page().''.$pagination->check_search();?>"> >> </a>
 </body>
 </html>

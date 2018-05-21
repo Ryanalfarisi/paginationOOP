@@ -12,7 +12,15 @@
 		}
 
 		public function set_total_records(){
-			$stmt	= $this->db->prepare("SELECT id FROM $this->table");
+
+			$query  = "SELECT id FROM $this->table";
+
+			if($this->is_search()){
+				$val 	= $this->is_search();
+				$query  = "SELECT id FROM $this->table WHERE username LIKE '%$val%'";
+			}
+
+			$stmt	= $this->db->prepare($query);
 			$stmt->execute();
 			$this->total_records = $stmt->rowCount();
 		}
@@ -22,9 +30,28 @@
 			if($this->current_page() > 1){
 				$start = ($this->current_page() * $this->limit) - $this->limit;
 			}
-			$stmt = $this->db->prepare("SELECT * FROM $this->table LIMIT $start, $this->limit");
+
+			$query  = "SELECT * FROM $this->table LIMIT $start, $this->limit";
+
+			if($this->is_search()){
+				$val 	= $this->is_search();
+				$query  = "SELECT id FROM $this->table WHERE username LIKE '%$val%' $start, $this->limit";
+			}
+
+			$stmt = $this->db->prepare($query);
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}
+		public function check_search(){
+			if($this->is_search()){
+				return '&search='.$this->is_search();
+			}
+			return '';
+		}
+
+
+		public function is_search(){
+			return isset($_GET['search']) ? $_GET['search'] : '';
 		}
 
 		public function current_page(){
@@ -50,4 +77,3 @@
 
  ?>
 
- 
