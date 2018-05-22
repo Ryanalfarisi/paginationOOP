@@ -26,8 +26,10 @@
 	<hr>
 	<a href="?page=<? echo $pagination->prev_page().''.$pagination->check_search();?>"> << </a>
 		<? for($=i; $i<=$pages; $i++): ?>
-			<a class="<? echo $pagination->is_active_class($i) ?>" 
+			<? if($pagination->is_showable($i)):?>
+				<a class="<? echo $pagination->is_active_class($i) ?>" 
 				href="?page=<? echo $i.''.$pagination->check_search(); ?>"><? echo $i;</a>
+			<? endif; ?>
 		<? endfor; ?>
 	<a href="?page=<? echo $pagination->next_page().''.$pagination->check_search();?>"> >> </a>
 </body>

@@ -2,12 +2,13 @@
 	
 	class Pagination{
 
-		private $db, $table, $total_records, $limit = 5;
+		private $db, $table, $total_records, $limit = 5, $col;
 
 		//PDO connection
 		public function __construct($table){
 			$this->table = $table;
 			$this->db = new PDO("mysql:host=localhost; dbname=faker", "root", "root");
+			if($this->is_search()) $this->set_search_col();
 			$this->set_total_records();
 		}
 
@@ -17,7 +18,8 @@
 
 			if($this->is_search()){
 				$val 	= $this->is_search();
-				$query  = "SELECT id FROM $this->table WHERE username LIKE '%$val%'";
+				// $query  = "SELECT id FROM $this->table WHERE username LIKE '%$val%'";
+				$query  = "SELECT id FROM $this->table WHERE $this->col LIKE '%$val%'";
 			}
 
 			$stmt	= $this->db->prepare($query);
@@ -30,21 +32,20 @@
 			if($this->current_page() > 1){
 				$start = ($this->current_page() * $this->limit) - $this->limit;
 			}
-
 			$query  = "SELECT * FROM $this->table LIMIT $start, $this->limit";
 
 			if($this->is_search()){
 				$val 	= $this->is_search();
-				$query  = "SELECT id FROM $this->table WHERE username LIKE '%$val%' $start, $this->limit";
+				// $query  = "SELECT id FROM $this->table WHERE username LIKE '%$val%' $start, $this->limit";
+				$query  = "SELECT id FROM $this->table WHERE $this->col LIKE '%$val%' $start, $this->limit";
 			}
-
 			$stmt = $this->db->prepare($query);
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
 		}
 		public function check_search(){
 			if($this->is_search()){
-				return '&search='.$this->is_search();
+				return '&search='.$this->is_search().'&col='.$this->col;
 			}
 			return '';
 		}
@@ -72,6 +73,19 @@
 			return ($page == $this->current_page()) ? 'active' : '';
 		}
 		
+		public function set_search_col(){
+			$this->col = $_GET['col'];
+		}
+		public function is_showable($num){
+			// The first conditions
+		  if($this->get_pagination_number() < 4 || $this->current_page() == $num)
+				return true
+			// The second conditions
+		  if(
+				($this->current_page()-2) <= $num && ($this->current_page()+2) >= $num
+			)
+				return true
+		}
 	}
 
 
